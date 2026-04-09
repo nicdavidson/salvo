@@ -17,9 +17,9 @@ case "$CMD" in
   install)
     DEST="${HOME}/.local/bin"
     mkdir -p "$DEST"
-    ln -sf "$SCRIPT_DIR/setup.sh" "$DEST/salvo"
-    echo "Installed: salvo → $DEST/salvo"
-    echo "Run 'salvo init' in any project directory."
+    ln -sf "$SCRIPT_DIR/setup.sh" "$DEST/oc-salvo"
+    echo "Installed: oc-salvo → $DEST/oc-salvo"
+    echo "Run 'oc-salvo init' in any project directory."
     ;;
 
   init)

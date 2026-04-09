@@ -38,11 +38,11 @@ cd salvo
 ./setup.sh install
 ```
 
-That puts `salvo` on your PATH. Then in any project:
+That puts `oc-salvo` on your PATH. Then in any project:
 
 ```bash
 cd my-project
-salvo init
+oc-salvo init
 ```
 
 Done. Agents are copied into `.opencode/agent/` and ready to go.
@@ -147,7 +147,7 @@ The body of the file is the agent's detailed instructions. Edit freely — these
 
 ### Already global
 
-If you ran `./setup.sh install`, `salvo` is already on your PATH. Just `salvo init` in any project.
+If you ran `./setup.sh install`, `oc-salvo` is already on your PATH. Just `oc-salvo init` in any project.
 
 ## Writing Good Specs
 

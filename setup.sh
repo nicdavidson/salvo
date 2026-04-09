@@ -1,35 +1,59 @@
 #!/bin/bash
 set -e
 
-# OpenCode Swarm — agent installer
-# Usage: ./setup.sh [target-project-dir]
+# Salvo — sub-agent swarm for OpenCode
+# Usage:
+#   salvo init           — install agents into current project
+#   salvo init /path     — install agents into target project
+#   salvo install        — put 'salvo' command on your PATH
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SELF="$0"
+[ -L "$SELF" ] && SELF="$(readlink -f "$SELF")"
+SCRIPT_DIR="$(cd "$(dirname "$SELF")" && pwd)"
 AGENTS_SRC="$SCRIPT_DIR/agents"
-TARGET="${1:-.}"
-DEST="$TARGET/.opencode/agent"
+CMD="${1:-init}"
 
-if [ ! -d "$AGENTS_SRC" ]; then
-  echo "Error: agents/ directory not found at $SCRIPT_DIR"
-  exit 1
-fi
+case "$CMD" in
+  install)
+    DEST="${HOME}/.local/bin"
+    mkdir -p "$DEST"
+    ln -sf "$SCRIPT_DIR/setup.sh" "$DEST/salvo"
+    echo "Installed: salvo → $DEST/salvo"
+    echo "Run 'salvo init' in any project directory."
+    ;;
 
-mkdir -p "$DEST"
+  init)
+    TARGET="${2:-.}"
+    DEST="$TARGET/.opencode/agent"
 
-count=0
-for f in "$AGENTS_SRC"/*.md; do
-  cp "$f" "$DEST/"
-  count=$((count + 1))
-  echo "  + $(basename "$f")"
-done
+    if [ ! -d "$AGENTS_SRC" ]; then
+      echo "Error: agents/ directory not found at $SCRIPT_DIR"
+      exit 1
+    fi
 
-echo ""
-echo "Installed $count agents → $DEST"
-echo ""
-echo "Usage:"
-echo "  cd $TARGET && opencode"
-echo "  - Orchestrator is your default agent (mode: primary)"
-echo "  - Type @ to see sub-agents: code-writer, test-writer, etc."
-echo "  - Give it a spec or task and let it build."
-echo ""
-echo "To set a model, add 'model: provider/model-name' to agent frontmatter."
+    mkdir -p "$DEST"
+
+    count=0
+    for f in "$AGENTS_SRC"/*.md; do
+      cp "$f" "$DEST/"
+      count=$((count + 1))
+      echo "  + $(basename "$f")"
+    done
+
+    echo ""
+    echo "Salvo: $count agents installed → $DEST"
+    echo ""
+    echo "Run 'opencode' — orchestrator is your default agent."
+    echo "Type @ to see sub-agents."
+    ;;
+
+  *)
+    echo "Salvo — sub-agent swarm for OpenCode"
+    echo ""
+    echo "Usage:"
+    echo "  salvo init [dir]   Install agents into a project (default: current dir)"
+    echo "  salvo install      Add 'salvo' command to your PATH"
+    echo ""
+    echo "https://github.com/nicdavidson/salvo"
+    ;;
+esac

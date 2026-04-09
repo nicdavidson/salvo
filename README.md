@@ -35,16 +35,17 @@ Orchestrator (primary)
 ```bash
 git clone https://github.com/nicdavidson/salvo.git
 cd salvo
-./setup.sh /path/to/your/project
+./setup.sh install
 ```
 
-Or from inside your project:
+That puts `salvo` on your PATH. Then in any project:
 
 ```bash
-/path/to/salvo/setup.sh .
+cd my-project
+salvo init
 ```
 
-This copies agent definitions into `.opencode/agent/` in your project.
+Done. Agents are copied into `.opencode/agent/` and ready to go.
 
 ### Run
 
@@ -144,16 +145,9 @@ tools:
 
 The body of the file is the agent's detailed instructions. Edit freely — these are yours.
 
-### Making it global
+### Already global
 
-Instead of running setup per project:
-
-```bash
-# Add to ~/.bashrc or ~/.zshrc
-alias salvo='/path/to/salvo/setup.sh .'
-```
-
-Then just run `salvo` in any project directory.
+If you ran `./setup.sh install`, `salvo` is already on your PATH. Just `salvo init` in any project.
 
 ## Writing Good Specs
 
